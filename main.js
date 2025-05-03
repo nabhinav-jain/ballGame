@@ -8,6 +8,12 @@ const config = {
     preload,
     update
   },
+  physics: {
+    default: 'arcade',
+    arcade: {
+        gravity: { y: 0 }
+    }
+},
 };
 
 const game = new Phaser.Game(config);
@@ -40,20 +46,32 @@ function create() {
 
   graphics.fillStyle(0x228b22, 1);
   graphics.fillRect(0, canvasHeight - landHeight, canvasWidth, greenTopHeight);
-
-  ball = this.add.image(canvasWidth / 4, canvasHeight - landHeight - ballRadius, 'redBall');
+  ball = this.physics.add.image(canvasWidth / 4, canvasHeight - landHeight - ballRadius, 'redBall');
   ball.setOrigin(0.5);
+  ball.setCollideWorldBounds(true);
+  ball.setBounce(0.9);
+  ball.setCircle(ballRadius);
+  
 
   cursors = this.input.keyboard.createCursorKeys();
+
+  this.cameras.main.startFollow(ball);
+
+  this.cameras.main.setBounds(0, 0, canvasWidth * 2, canvasHeight);
+  this.physics.world.setBounds(0, 0, canvasWidth * 2, canvasHeight);
 
   this.add.text(20, 20, "Balls Land", { font: "20px Arial", fill: "#ffffff" });
 }
 
 function update() {
     if (cursors.left.isDown) {
-        ball.x = Math.max(ballRadius, ball.x - ballSpeed); 
-      }
-      if (cursors.right.isDown) {
-        ball.x=  ball.x + ballSpeed; 
-      }
-  }
+        ball.setVelocityX(-ballSpeed); 
+       
+    }
+    else if (cursors.right.isDown) {
+        ball.setVelocityX(ballSpeed); 
+    }
+    else {
+        ball.setVelocityX(0); 
+    }
+}
