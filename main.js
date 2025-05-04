@@ -93,11 +93,13 @@ function update() {
     }
     else if (cursors.right.isDown) {
         ball.setVelocityX(ballSpeed); 
-    }else if(cursors.up.isDown && ball.body.blocked.down){
-        ball.setVelocityY((-50)*ballSpeed);
     }
     else {
         ball.setVelocityX(0); 
-        ball.setVelocityY(0);
+        
     }
+
+     if(cursors.up.isDown && ball.body.blocked.down){
+      ball.setVelocityY((-5)*ballSpeed);
+  }
 }
